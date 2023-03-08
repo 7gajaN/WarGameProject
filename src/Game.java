@@ -1,7 +1,5 @@
-import java.lang.reflect.Array;
+
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
 
 public class Game {
 
@@ -46,25 +44,16 @@ public class Game {
             return inGame;
     }
 
-    public static void checkPlayers(ArrayList<ArrayList<Card>> playerHand,int players){
-        for(int i=0; i<= players; i++)
-            if(playerHand.get(i).isEmpty()){
-                playerHand.remove(i);
-                players--;
-                i--;
-            }
-    }
-
     public static void startWar(ArrayList<ArrayList<Card>> playerHand,int players){
         ArrayList<Card> table = new ArrayList<Card>();
         ArrayList<Card> aux = new ArrayList<Card>();
         ArrayList<Integer> inGame = new ArrayList<Integer>();
 
-        while (playerHand.size()>1){
+        while (players>1){
             inGame.clear();
             table.clear();
             aux.clear();
-            for(int i=0; i<= players; i++)
+            for(int i=0; i< players; i++)
                 if(playerHand.get(i).isEmpty()){
                     playerHand.remove(i);
                     players--;
@@ -82,14 +71,21 @@ public class Game {
             }
 
             getWinner(table,inGame);
-            System.out.println(inGame);
+            //System.out.println(inGame);
 
             while (inGame.size()>1){
                 System.out.println("@@@@@@@@@@@@@WAR@@@@@@@@@@@@@@@@@@@");
-                for(Card card : table){
-                    aux.add(card);
-                }
                 table.clear();
+                System.out.println(inGame);
+                try {
+                    for (Integer i : inGame) {
+                        if (playerHand.get(i).isEmpty()) {
+                            System.out.println(playerHand.get(i).isEmpty());
+                            inGame.remove(i);
+                        }
+                    }
+                }catch(Exception e){
+                e.printStackTrace();}
                 for(Integer i : inGame) {
                     table.add(playerHand.get(i).get(0));
                     playerHand.get(i).remove(0);
@@ -101,11 +97,13 @@ public class Game {
             }
             if(inGame.size() == 1){
                 playerHand.get(getWinner(table,inGame).get(0)).addAll(aux);
+                aux.clear();
             }
         }
         }
 
     public static ArrayList<ArrayList<Card>> playerHand = new ArrayList<ArrayList<Card>>();
+
     public static void startGame(int players, ArrayList<Card> deck) {
             int playerIndex = 0;
             int cardCounter = 0;
@@ -118,28 +116,22 @@ public class Game {
                 if(isMultiple(cardCounter, 52/players)){
                     playerHand.add(new ArrayList<Card>());
                     playerIndex = playerIndex + 1;
-                } // have to fix extra index when 52%players != 0
+                }
+            }
+
+            for(int i=0;i<playerHand.size();i++){
+                if(playerHand.get(i).size()<52/players){
+                    playerHand.remove(i);
+                    i--;}
             }
 
 
+             displayHands(playerHand,players);
+            System.out.println(playerHand.size());
+
             startWar(playerHand,players);
-//            while (players > 1){
-//                    table.clear();
-//                    for(int i=0;i<players;i++){
-//                        if(playerHand.get(i).isEmpty()){
-//                            playerHand.remove(i);
-//                            players = players - 1;
-//                            System.out.println("player out");
-//                            displayHands(playerHand, players);
-//
-//                        }
-//                    }
-//                    displayHands(playerHand, players);
-//                    for(int i=0;i<players;i++)
-//                    {table.add(playerHand.get(i).get(0));
-//                        playerHand.get(i).remove(0);}
-//                    System.out.println(getWinner(table,players));
-//                    playerHand.get(getWinner(table,players).get(0)).addAll(table);
+
+
             }
 
     }

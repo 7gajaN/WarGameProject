@@ -8,5 +8,7 @@ public class Main {
         Collections.shuffle(deck);
 
         Game.startGame(8, deck);
+
+
     }
 }
