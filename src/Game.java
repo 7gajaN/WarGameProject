@@ -48,58 +48,65 @@ public class Game {
         ArrayList<Card> table = new ArrayList<Card>();
         ArrayList<Card> aux = new ArrayList<Card>();
         ArrayList<Integer> inGame = new ArrayList<Integer>();
-
-        while (players>1){
-            inGame.clear();
-            table.clear();
-            aux.clear();
-            for(int i=0; i< players; i++)
-                if(playerHand.get(i).isEmpty()){
-                    playerHand.remove(i);
-                    players--;
-                    i--;
-                } //if its an exterior method it doesnt work???
-            displayHands(playerHand,players);
-            for(int i=0;i<players;i++){
-                table.add(playerHand.get(i).get(0));
-                playerHand.get(i).remove(0);
-                inGame.add(i);
-            }
-
-            for(Card card : table){
-                aux.add(card);
-            }
-
-            getWinner(table,inGame);
-            //System.out.println(inGame);
-
-            while (inGame.size()>1){
-                System.out.println("@@@@@@@@@@@@@WAR@@@@@@@@@@@@@@@@@@@");
+        long start = System.currentTimeMillis();
+        long end = start + 30 * 1000;
+        while (System.currentTimeMillis() < end) {
+            if (players == 1)
+                break;
+            else{
+                inGame.clear();
                 table.clear();
-                System.out.println(inGame);
-                try {
-                    for (Integer i : inGame) {
-                        if (playerHand.get(i).isEmpty()) {
-                            System.out.println(playerHand.get(i).isEmpty());
-                            inGame.remove(i);
-                        }
-                    }
-                }catch(Exception e){
-                e.printStackTrace();}
-                for(Integer i : inGame) {
+                aux.clear();
+                for (int i = 0; i < players; i++)
+                    if (playerHand.get(i).isEmpty()) {
+                        playerHand.remove(i);
+                        players--;
+                        i--;
+                    } //if its an exterior method it doesnt work???
+                displayHands(playerHand, players);
+                for (int i = 0; i < players; i++) {
                     table.add(playerHand.get(i).get(0));
                     playerHand.get(i).remove(0);
+                    inGame.add(i);
                 }
-                displayTable(table);
-                System.out.println(inGame);
-                System.out.println(getWinner(table,inGame));
-                aux.addAll(table);
-            }
-            if(inGame.size() == 1){
-                playerHand.get(getWinner(table,inGame).get(0)).addAll(aux);
-                aux.clear();
+
+                for (Card card : table) {
+                    aux.add(card);
+                }
+
+                getWinner(table, inGame);
+                //System.out.println(inGame);
+
+                while (inGame.size() > 1) {
+                    System.out.println("@@@@@@@@@@@@@WAR@@@@@@@@@@@@@@@@@@@");
+                    table.clear();
+                    System.out.println(inGame);
+                    try {
+                        for (Integer i : inGame) {
+                            if (playerHand.get(i).isEmpty()) {
+                                System.out.println(playerHand.get(i).isEmpty());
+                                inGame.remove(i);
+                            }
+                        }
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                    for (Integer i : inGame) {
+                        table.add(playerHand.get(i).get(0));
+                        playerHand.get(i).remove(0);
+                    }
+                    displayTable(table);
+                    System.out.println(inGame);
+                    System.out.println(getWinner(table, inGame));
+                    aux.addAll(table);
+                }
+                if (inGame.size() == 1) {
+                    playerHand.get(getWinner(table, inGame).get(0)).addAll(aux);
+                    aux.clear();
+                }
             }
         }
+        System.out.println("END GAME");
         }
 
     public static ArrayList<ArrayList<Card>> playerHand = new ArrayList<ArrayList<Card>>();
