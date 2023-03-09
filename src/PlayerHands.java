@@ -23,7 +23,7 @@ public class PlayerHands {
         this.player = player;
     }
 
-    public static void dealCards(ArrayList<Card>deck,int players){
+    public static ArrayList<Player> dealCards(ArrayList<Card>deck, int players){
         ArrayList<Player> playerHand = new ArrayList<Player>();
         for(int i=0;i<players;i++){
             playerHand.add(new Player(i,new ArrayList<Card>()));
@@ -45,15 +45,7 @@ public class PlayerHands {
 
     }
 
-        for(Player player : playerHand)
-            player.displayHand(player);
-
-        ArrayList<Integer> test = new ArrayList<>();
-        for(int i=0;i<playerHand.size();i++)
-            test.add(i);
-
-
-        System.out.println(Game.getWinner(Table.populateTable(playerHand,test),test));
+    return playerHand;
 
     }
 }

@@ -7,7 +7,7 @@ public class Main {
 
         Collections.shuffle(deck);
 
-        PlayerHands.dealCards(deck,8);
+        Game.startGame(8,deck);
 
 
     }
