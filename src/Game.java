@@ -3,141 +3,92 @@ import java.util.ArrayList;
 
 public class Game {
 
-    public static boolean isMultiple(int num1, int num2) {
-        if (num1 % num2 == 0) {
-            return true;
-        } else {
-            return false;
-        }
-    }
-
-    public static void displayHands(ArrayList<ArrayList<Card>> hands, int players){
-        for(int i=0; i< players; i++){
-            System.out.print("Player " + (i+1) + " has: [");
-            for(Card card : hands.get(i))
-                System.out.print(card.getNumber() + " of " + card.getSign() + " , ");
-            System.out.println();
-        }
-    }
-    public static void displayTable(ArrayList<Card> table){
-        for(Card card : table)
-            System.out.print(card.getNumber() + " of " + card.getSign() + " , ");
-    }
-
-    public static ArrayList<Integer> getWinner(ArrayList<Card> cards, ArrayList<Integer> inGame){
+    public static ArrayList<Integer> getWinner(Table table, ArrayList<Integer> inGame){
         int max = 0;
-        ArrayList<Card> cardsAux  = new ArrayList<Card>();
-        cardsAux.addAll(cards);
-            for(int i=0;i<inGame.size();i++)
-                if( max < cardsAux.get(i).getPower()) {
-                    max = cardsAux.get(i).getPower();
-                }
-            int j=0;
-            while(j<inGame.size()){
-                if(cardsAux.get(j).getPower() != max){
-                    inGame.remove(j);
-                    cardsAux.remove(j);
-                }
-                else
-                    j++;
-            }
-            return inGame;
+        ArrayList<Integer> getWinner = new ArrayList<Integer>();
+        for(PlayedCard card : table.cards){
+            if(card.getPower()>max)
+                max = card.getPower();
+        }
+        for(PlayedCard card : table.cards){
+            if(card.getPower()==max)
+                getWinner.add(card.getPlayerIndex());
+        }
+        inGame.clear();
+        inGame.addAll(getWinner);
+        return inGame;
     }
 
-    public static void startWar(ArrayList<ArrayList<Card>> playerHand,int players){
-        ArrayList<Card> table = new ArrayList<Card>();
+    public static void appendCards(ArrayList<Integer> winnerList, ArrayList<Player> playerHand, Table table){
+        int winner = winnerList.get(0);
         ArrayList<Card> aux = new ArrayList<Card>();
-        ArrayList<Integer> inGame = new ArrayList<Integer>();
-        long start = System.currentTimeMillis();
-        long end = start + 30 * 1000;
-        while (System.currentTimeMillis() < end) {
-            if (players == 1)
-                break;
-            else{
-                inGame.clear();
-                table.clear();
-                aux.clear();
-                for (int i = 0; i < players; i++)
-                    if (playerHand.get(i).isEmpty()) {
-                        playerHand.remove(i);
-                        players--;
-                        i--;
-                    } //if its an exterior method it doesnt work???
-                displayHands(playerHand, players);
-                for (int i = 0; i < players; i++) {
-                    table.add(playerHand.get(i).get(0));
-                    playerHand.get(i).remove(0);
-                    inGame.add(i);
-                }
-
-                for (Card card : table) {
-                    aux.add(card);
-                }
-
-                getWinner(table, inGame);
-                //System.out.println(inGame);
-
-                while (inGame.size() > 1) {
-                    System.out.println("@@@@@@@@@@@@@WAR@@@@@@@@@@@@@@@@@@@");
-                    table.clear();
-                    System.out.println(inGame);
-                    try {
-                        for (Integer i : inGame) {
-                            if (playerHand.get(i).isEmpty()) {
-                                System.out.println(playerHand.get(i).isEmpty());
-                                inGame.remove(i);
-                            }
-                        }
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-                    for (Integer i : inGame) {
-                        table.add(playerHand.get(i).get(0));
-                        playerHand.get(i).remove(0);
-                    }
-                    displayTable(table);
-                    System.out.println(inGame);
-                    System.out.println(getWinner(table, inGame));
-                    aux.addAll(table);
-                }
-                if (inGame.size() == 1) {
-                    playerHand.get(getWinner(table, inGame).get(0)).addAll(aux);
-                    aux.clear();
-                }
-            }
+        for(int i=0;i<table.cards.size();i++)
+            aux.add(new Card(table.cards.get(i).getNumber(),table.cards.get(i).getSign(),table.cards.get(i).getPower()));
+        for(Player player : playerHand){
+            if(player.getIndex()==winner){
+                player.getHand().addAll(aux);
+                break;}
         }
-        System.out.println("END GAME");
-        }
+    }
 
-    public static ArrayList<ArrayList<Card>> playerHand = new ArrayList<ArrayList<Card>>();
+    public static void checkPlayerHand(PlayerHands playerHands,ArrayList<Integer> inGame){
+        for(int i=0;i<inGame.size();i++)
+            for(Player p : playerHands.player)
+                if(p.getIndex()==inGame.get(i))
+                    if(p.getHand().isEmpty()) {
+                        inGame.remove(i);
+                    }
+    }
+
 
     public static void startGame(int players, ArrayList<Card> deck) {
-            int playerIndex = 0;
-            int cardCounter = 0;
 
-            playerHand.add(new ArrayList<Card>());
+                PlayerHands playerHand = new PlayerHands(PlayerHands.dealCards(deck,players));
 
-            for(Card card : deck){
-                cardCounter = cardCounter + 1;
-                playerHand.get(playerIndex).add(card);
-                if(isMultiple(cardCounter, 52/players)){
-                    playerHand.add(new ArrayList<Card>());
-                    playerIndex = playerIndex + 1;
+                Table table = new Table(new ArrayList<PlayedCard>());
+
+                long start = System.currentTimeMillis();
+                long end = start + 30 * 1000;
+
+        while (System.currentTimeMillis() < end) {
+            if (playerHand.player.size() > 1) {
+                System.out.println("______________________________");
+                playerHand.removeUser(playerHand);
+                for (Player player : playerHand.player) {
+                    System.out.print("Player " + player.getIndex() + " [ ");
+                    player.displayHand(player);
                 }
-            }
 
-            for(int i=0;i<playerHand.size();i++){
-                if(playerHand.get(i).size()<52/players){
-                    playerHand.remove(i);
-                    i--;}
-            }
+                ArrayList<Integer> inGame = new ArrayList<>();
+                for (Player p : playerHand.player)
+                    inGame.add(p.getIndex());
+
+                table = Table.populateTable(playerHand.player, inGame);
+
+                ArrayList<PlayedCard> aux = new ArrayList<PlayedCard>();
+
+                getWinner(table, inGame);
+
+                while (inGame.size() > 1) {//case war
+                    aux.addAll(table.cards);
+                    table.cards.clear();
+                    System.out.println(inGame);
+                    checkPlayerHand(playerHand,inGame);
+                    table = Table.populateTable(playerHand.player, inGame);
+                    getWinner(table, inGame);
+                }
+                System.out.println(inGame);
+                aux.addAll(table.cards);
+                table.setCards(aux);
+                appendCards(inGame, playerHand.player, table);
 
 
-             displayHands(playerHand,players);
-            System.out.println(playerHand.size());
+                table.cards.clear();
+                aux.clear();
+            }else break;
+        }
 
-            startWar(playerHand,players);
-
+        System.out.println("@@@@@@@@@@@@@@@@@@@@@END@@@@@@@@@@@@@@@@@@@@");
 
             }
 
