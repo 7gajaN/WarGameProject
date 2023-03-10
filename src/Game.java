@@ -56,21 +56,22 @@ public class Game {
 
 
     public static void startGame(int players, ArrayList<Card> deck) {
-                //ArrayList<Player> playerHand = new ArrayList<Player>();
-                //playerHand = PlayerHands.dealCards(deck,players);
 
                 PlayerHands playerHand = new PlayerHands(PlayerHands.dealCards(deck,players));
 
                 Table table = new Table(new ArrayList<PlayedCard>());
 
-                for(int j = 0 ;j<5;j++) {
+                for(int j = 0 ;j<100;j++) {
                     System.out.println("______________________________");
-                    for(Player player : playerHand.player)
+                    playerHand.removeUser(playerHand);
+                    for(Player player : playerHand.player) {
+                        System.out.print("Player " + player.getIndex() + " [ ");
                         player.displayHand(player);
+                    }
 
                     ArrayList<Integer> inGame = new ArrayList<>();
-                    for (int i = 0; i < playerHand.player.size(); i++)
-                        inGame.add(i);
+                    for (Player p : playerHand.player)
+                        inGame.add(p.getIndex());
 
                     table = Table.populateTable(playerHand.player, inGame);
 

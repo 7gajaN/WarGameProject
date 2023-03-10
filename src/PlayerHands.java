@@ -23,6 +23,16 @@ public class PlayerHands {
         this.player = player;
     }
 
+    public void removeUser(PlayerHands playerHand){
+        for(int i=0;i<playerHand.player.size();i++){
+            if(playerHand.player.get(i).getHand().isEmpty()) {
+                playerHand.player.remove(i);
+                i--;
+            }
+        }
+
+    }
+
     public static ArrayList<Player> dealCards(ArrayList<Card>deck, int players){
         ArrayList<Player> playerHand = new ArrayList<Player>();
         for(int i=0;i<players;i++){
