@@ -35,6 +35,8 @@ public class Game {
 
         deck.shuffleDeck();
 
+        deck.displayDeck();
+
         Dealer dealer = new Dealer(deck);
 
         PlayerList playerList = dealer.dealCards(players);

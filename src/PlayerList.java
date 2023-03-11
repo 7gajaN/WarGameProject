@@ -2,7 +2,7 @@ import java.util.LinkedList;
 
 public class PlayerList {
 
-    LinkedList<Player> playerList = new LinkedList<>();
+    LinkedList<Player> playerList;
 
     public PlayerList(){
         this.playerList = new LinkedList<>();
@@ -17,10 +17,6 @@ public class PlayerList {
 
     public void addPlayer(int index){
         this.playerList.add(new Player(index));
-    }
-
-    public int size(){
-        return playerList.size();
     }
 
     public void displayHands(){
@@ -38,7 +34,7 @@ public class PlayerList {
 
     public void eliminatePlayers(LinkedList<Integer> inGame){
         for(int i=0;i<inGame.size();i++){
-            if(getPlayerByIndex(inGame.get(i)).handIsEmpty()==true) {
+            if(getPlayerByIndex(inGame.get(i)).handIsEmpty()) {
                 this.playerList.remove(getPlayerByIndex(inGame.get(i)));
                 inGame.remove(i);
                 i--;

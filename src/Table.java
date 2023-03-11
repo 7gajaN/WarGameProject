@@ -12,10 +12,6 @@ public class Table {
         return cards;
     }
 
-    public void setCards(LinkedList<PlayedCard> cards) {
-        this.cards = cards;
-    }
-
     public void addCardFromPlayer(Player player){
        this.cards.addLast(new PlayedCard(player.hand.getTopCard(), player.index));
     }
@@ -44,7 +40,6 @@ public class Table {
     }
 
     public void addCardsFromTable(Table table){
-        for(PlayedCard pc : table.cards)
-            this.cards.add(pc);
+        this.cards.addAll(table.cards);
     }
 }
