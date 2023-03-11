@@ -1,36 +1,50 @@
-import java.util.ArrayList;
+import java.util.LinkedList;
 
 public class Table {
 
-    ArrayList<PlayedCard> cards;
+    LinkedList<PlayedCard> cards;
 
-    public ArrayList<PlayedCard> getCards() {
+    public Table(){
+        cards = new LinkedList<>();
+    }
+
+    public LinkedList<PlayedCard> getCards() {
         return cards;
     }
 
-    public void setCards(ArrayList<PlayedCard> cards) {
+    public void setCards(LinkedList<PlayedCard> cards) {
         this.cards = cards;
     }
 
-    public Table(ArrayList<PlayedCard> cards){
-        this.cards = cards;
+    public void addCardFromPlayer(Player player){
+       this.cards.addLast(new PlayedCard(player.hand.getTopCard(), player.index));
     }
 
-    public static Table populateTable(ArrayList<Player> playerHands, ArrayList<Integer> inGame){
-       ArrayList<PlayedCard> cards = new ArrayList<PlayedCard>();
-       for(int i=0;i<inGame.size();i++) {
-           for(Player player : playerHands){
-               if(player.getIndex()==inGame.get(i))
-               {
-                   cards.add(new PlayedCard(player.getHand().get(0).number,player.getHand().get(0).sign,player.getHand().get(0).power,inGame.get(i)));
-                   player.getHand().remove(0);
-               }
-           }
-       }
-
-       Table table = new Table(cards);
-
-       return table;
+    public void clearTable(){
+        this.cards.clear();
     }
 
+    public int getMax(){
+        int max = 0;
+        for(PlayedCard pc : this.cards)
+            if(pc.getPower()>max)
+                max=pc.getPower();
+
+    return max;
+    }
+
+    public LinkedList<Integer> getWinners(){
+        LinkedList<Integer> winnerIndex = new LinkedList<>();
+        int max = getMax();
+
+        for(PlayedCard pc : this.cards)
+            if(pc.getPower()==max)
+                winnerIndex.add(pc.index);
+        return winnerIndex;
+    }
+
+    public void addCardsFromTable(Table table){
+        for(PlayedCard pc : table.cards)
+            this.cards.add(pc);
+    }
 }

@@ -1,17 +1,15 @@
-public class PlayedCard extends Card{
-
-    int playerIndex;
-
-    public int getPlayerIndex() {
-        return playerIndex;
+public class PlayedCard extends Card {
+    int index;
+    public PlayedCard(Card card, int index){
+        super(card.getNumber(), card.getSign(), card.getPower());
+        this.index = index;
     }
 
-    public void setPlayerIndex(int playerIndex) {
-        this.playerIndex = playerIndex;
+    public int getIndex() {
+        return index;
     }
 
-    public PlayedCard(String number, String sign, int power, int playerIndex) {
-        super(number, sign, power);
-        this.playerIndex = playerIndex;
+    public void setIndex(int index) {
+        this.index = index;
     }
 }

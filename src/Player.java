@@ -1,35 +1,43 @@
-import java.util.ArrayList;
+import java.util.LinkedList;
 
 public class Player {
     int index;
-    ArrayList<Card> hand;
+    Deck hand;
 
-    public int getIndex() {
-        return index;
-    }
-
-    public ArrayList<Card> getHand() {
+    public Deck getHand() {
         return hand;
     }
 
-    public void setHand(ArrayList<Card> hand) {
+    public void setHand(Deck hand) {
         this.hand = hand;
+    }
+
+    public int getIndex() {
+        return index;
     }
 
     public void setIndex(int index) {
         this.index = index;
     }
 
-    public void displayHand(Player player){
-        for(Card card : player.hand)
+    public Player(int index){
+        this.index = index;
+        hand = new Deck();
+    }
+
+    public void displayPlayerHand(){
+        System.out.print("Player " + this.index + " [ ");
+        for(Card card : this.getHand().cards)
             System.out.print(card.getNumber() + " of " + card.getSign() + " // ");
         System.out.println();
     }
 
-    public Player(int index, ArrayList<Card> hand){
-        this.index = index;
-        this.hand = hand;
-
+    public void appendCards(LinkedList<PlayedCard> cards){
+        for(PlayedCard pc :cards)
+            this.hand.addCardToBottom(new Card(pc.getNumber(),pc.getSign(),pc.getPower()));
     }
 
+    public boolean handIsEmpty(){
+        return this.hand.cards.isEmpty();
+    }
 }

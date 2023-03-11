@@ -1,96 +1,59 @@
-
-import java.util.ArrayList;
+import java.util.LinkedList;
 
 public class Game {
 
-    public static ArrayList<Integer> getWinner(Table table, ArrayList<Integer> inGame){
-        int max = 0;
-        ArrayList<Integer> getWinner = new ArrayList<Integer>();
-        for(PlayedCard card : table.cards){
-            if(card.getPower()>max)
-                max = card.getPower();
-        }
-        for(PlayedCard card : table.cards){
-            if(card.getPower()==max)
-                getWinner.add(card.getPlayerIndex());
-        }
-        inGame.clear();
-        inGame.addAll(getWinner);
-        return inGame;
+    public Game(){
+
     }
 
-    public static void appendCards(ArrayList<Integer> winnerList, ArrayList<Player> playerHand, Table table){
-        int winner = winnerList.get(0);
-        ArrayList<Card> aux = new ArrayList<Card>();
-        for(int i=0;i<table.cards.size();i++)
-            aux.add(new Card(table.cards.get(i).getNumber(),table.cards.get(i).getSign(),table.cards.get(i).getPower()));
-        for(Player player : playerHand){
-            if(player.getIndex()==winner){
-                player.getHand().addAll(aux);
-                break;}
+    public static void populateTable(PlayerList playerList, Table table, LinkedList<Integer> inGame){
+        for(Integer i : inGame)
+            table.addCardFromPlayer(playerList.getPlayerByIndex(i));
+    }
+
+    public static void simulateRound(PlayerList playerList,Table table,LinkedList<Integer> inGame, Table aux){
+        populateTable(playerList,table,inGame);
+        aux.addCardsFromTable(table);
+        System.out.println(table.getWinners());
+        if(table.getWinners().size()>1){
+            LinkedList<Integer> warParticipants = table.getWinners();
+            playerList.eliminatePlayers(warParticipants);
+            table.clearTable();
+            simulateRound(playerList,table,warParticipants,aux);
+            aux.addCardsFromTable(table);
+        }else {
+            playerList.getPlayerByIndex(table.getWinners().get(0)).appendCards(aux.getCards());
+            table.clearTable();
+            aux.clearTable();
         }
     }
 
-    public static void checkPlayerHand(PlayerHands playerHands,ArrayList<Integer> inGame){
-        for(int i=0;i<inGame.size();i++)
-            for(Player p : playerHands.player)
-                if(p.getIndex()==inGame.get(i))
-                    if(p.getHand().isEmpty()) {
-                        inGame.remove(i);
-                    }
-    }
+    public static void startGame(int players){
+        Deck deck = new Deck();
 
+        deck.createDeck();
 
-    public static void startGame(int players, ArrayList<Card> deck) {
+        deck.shuffleDeck();
 
-                PlayerHands playerHand = new PlayerHands(PlayerHands.dealCards(deck,players));
+        Dealer dealer = new Dealer(deck);
 
-                Table table = new Table(new ArrayList<PlayedCard>());
+        PlayerList playerList = dealer.dealCards(players);
 
-                long start = System.currentTimeMillis();
-                long end = start + 30 * 1000;
+        Table table = new Table();
+        Table aux = new Table();
+
+        long start = System.currentTimeMillis();
+        long end = start + 30 * 1000;
 
         while (System.currentTimeMillis() < end) {
-            if (playerHand.player.size() > 1) {
-                System.out.println("______________________________");
-                playerHand.removeUser(playerHand);
-                for (Player player : playerHand.player) {
-                    System.out.print("Player " + player.getIndex() + " [ ");
-                    player.displayHand(player);
-                }
-
-                ArrayList<Integer> inGame = new ArrayList<>();
-                for (Player p : playerHand.player)
-                    inGame.add(p.getIndex());
-
-                table = Table.populateTable(playerHand.player, inGame);
-
-                ArrayList<PlayedCard> aux = new ArrayList<PlayedCard>();
-
-                getWinner(table, inGame);
-
-                while (inGame.size() > 1) {//case war
-                    aux.addAll(table.cards);
-                    table.cards.clear();
-                    System.out.println(inGame);
-                    checkPlayerHand(playerHand,inGame);
-                    table = Table.populateTable(playerHand.player, inGame);
-                    getWinner(table, inGame);
-                }
-                System.out.println(inGame);
-                aux.addAll(table.cards);
-                table.setCards(aux);
-                appendCards(inGame, playerHand.player, table);
-
-
-                table.cards.clear();
-                aux.clear();
-            }else break;
+            playerList.eliminatePlayers(playerList.indexOfPlayersInGame());
+            playerList.displayHands();
+            simulateRound(playerList,table,playerList.indexOfPlayersInGame(),aux);
+            if(playerList.indexOfPlayersInGame().size()==1)
+                break;
         }
 
-        System.out.println("@@@@@@@@@@@@@@@@@@@@@END@@@@@@@@@@@@@@@@@@@@");
-
-            }
+        System.out.println("@@@@@@@@@@@@@@@@@@END@@@@@@@@@@@@@@@@@@@@@");
 
     }
-
+}
