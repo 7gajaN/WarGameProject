@@ -1,3 +1,4 @@
+import java.util.HashMap;
 import java.util.LinkedList;
 
 public class Player {
@@ -25,9 +26,10 @@ public class Player {
         System.out.println();
     }
 
-    public void appendCards(LinkedList<PlayedCard> cards){
-        for(PlayedCard pc :cards)
-            this.hand.addCardToBottom(new Card(pc.getNumber(),pc.getSign(),pc.getPower()));
+    public void appendCards(HashMap<Integer,Card> cards){
+        cards.forEach((i,pc)->{
+            this.hand.addCardToBottom(pc);
+        });
     }
 
     public boolean handIsEmpty(){

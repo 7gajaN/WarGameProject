@@ -79,24 +79,28 @@ public class Game {
         Table table = new Table();
         Table aux = new Table();
 
-        for(int i=0;i<10;i++){
-            checkAndUpdatePlayersInGame(playerList,getIndexOfPlayersInGame(playerList));
-            simulateRound(playerList,table,getIndexOfPlayersInGame(playerList),aux);
-            displayHands(playerList);
-        }
+//        table.getCardsFromPlayers(playerList,getIndexOfPlayersInGame(playerList));
+//        System.out.println(table.getMax());
+//        System.out.println(table.getWinners());
 
-
-
-//        long start = System.currentTimeMillis();
-//        long end = start + 30 * 1000;
-//
-//        while (System.currentTimeMillis() < end) {
-//            checkAndUpdatePlayersInGame(playerList, getIndexOfPlayersInGame(playerList));
-//            displayHands(playerList);
+//        for(int i=0;i<10;i++){
+//            checkAndUpdatePlayersInGame(playerList,getIndexOfPlayersInGame(playerList));
 //            simulateRound(playerList,table,getIndexOfPlayersInGame(playerList),aux);
-//            if(getIndexOfPlayersInGame(playerList).size()==1)
-//                break;
+//            displayHands(playerList);
 //        }
+
+
+
+        long start = System.currentTimeMillis();
+        long end = start + 30 * 1000;
+
+        while (System.currentTimeMillis() < end) {
+            checkAndUpdatePlayersInGame(playerList, getIndexOfPlayersInGame(playerList));
+            displayHands(playerList);
+            simulateRound(playerList,table,getIndexOfPlayersInGame(playerList),aux);
+            if(getIndexOfPlayersInGame(playerList).size()==1)
+                break;
+        }
 
         System.out.println("@@@@@@@@@@@@@@@@@@END@@@@@@@@@@@@@@@@@@@@@");
 
