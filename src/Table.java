@@ -1,4 +1,4 @@
-import java.util.LinkedList;
+import java.util.*;
 
 public class Table {
 
@@ -29,8 +29,8 @@ public class Table {
     return max;
     }
 
-    public LinkedList<Integer> getWinners(){
-        LinkedList<Integer> winnerIndex = new LinkedList<>();
+    public Set<Integer> getWinners(){
+        Set<Integer> winnerIndex = new HashSet<Integer>();
         int max = getMax();
 
         for(PlayedCard pc : this.cards)
@@ -43,8 +43,10 @@ public class Table {
         this.cards.addAll(table.cards);
     }
 
-    public void getCardsFromPlayers(PlayerList playerList,LinkedList<Integer> inGame){
-        for(Integer i : inGame)
-            addCardFromPlayer(playerList.getPlayerByIndex(i));
+    public void getCardsFromPlayers(LinkedHashMap<Integer,Player> playerList, Set<Integer> inGame){
+        Object[] inGameArray = inGame.toArray();
+        for(int i=0;i<inGameArray.length;i++)
+            addCardFromPlayer(playerList.get(inGameArray[i]));
+        }
     }
-}
+
