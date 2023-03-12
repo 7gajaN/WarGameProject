@@ -6,13 +6,8 @@ public class Game {
 
     }
 
-    public static void populateTable(PlayerList playerList, Table table, LinkedList<Integer> inGame){
-        for(Integer i : inGame)
-            table.addCardFromPlayer(playerList.getPlayerByIndex(i));
-    }
-
     public static void simulateRound(PlayerList playerList,Table table,LinkedList<Integer> inGame, Table aux){
-        populateTable(playerList,table,inGame);
+        table.getCardsFromPlayers(playerList,inGame);
         aux.addCardsFromTable(table);
         System.out.println(table.getWinners());
         if(table.getWinners().size()>1){

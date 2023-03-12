@@ -41,4 +41,8 @@ public class Deck {
             System.out.print(card.getNumber() + " of "+ card.getSign()+ " // ");
     }
 
+    public int getDeckSize(){
+        return this.cards.size();
+    }
+
 }

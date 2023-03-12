@@ -42,4 +42,9 @@ public class Table {
     public void addCardsFromTable(Table table){
         this.cards.addAll(table.cards);
     }
+
+    public void getCardsFromPlayers(PlayerList playerList,LinkedList<Integer> inGame){
+        for(Integer i : inGame)
+            addCardFromPlayer(playerList.getPlayerByIndex(i));
+    }
 }

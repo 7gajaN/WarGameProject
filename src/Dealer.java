@@ -14,7 +14,8 @@ public class Dealer {
             playerList.addPlayer(i);
 
         int j=0;
-        for(int i=0;i<52;i++){
+        int deckSize = dealerDeck.getDeckSize();
+        for(int i=0;i< deckSize;i++){
             if(j==nrPlayers)
                 j=0;
             playerList.getPlayerByIndex(j).getHand().addCardToTop(dealerDeck.getTopCard());
