@@ -26,10 +26,9 @@ public class Player {
         System.out.println();
     }
 
-    public void appendCards(HashMap<Integer,Card> cards){
-        cards.forEach((i,pc)->{
-            this.hand.addCardToBottom(pc);
-        });
+    public void appendCards(Deck cards){
+        for(int i=cards.cards.size()-1;i>=0;i--)
+            this.hand.addCardToBottom(cards.cards.get(i));
     }
 
     public boolean handIsEmpty(){

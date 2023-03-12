@@ -50,5 +50,11 @@ public class Table {
         for(int i=0;i<inGameArray.length;i++)
             addCardFromPlayer(playerList.get(inGameArray[i]));
         }
+
+        public void registerCards(Deck aux){
+        this.cards.forEach((i,pc)->{
+            aux.addCardToBottom(pc);
+        });
+        }
     }
 

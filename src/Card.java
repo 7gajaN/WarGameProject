@@ -1,6 +1,6 @@
 
 
-public class Card {
+public final class Card {
     String number;
     String sign;
     int power;
