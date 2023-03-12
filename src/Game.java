@@ -52,20 +52,26 @@ public class Game {
         });
     }
 
+    public static void dealCards(LinkedHashMap<Integer,Player> playerList,Deck deck){
+        int j=0;
+        int deckSize = deck.getDeckSize();
+        for(int i=0;i< deckSize;i++){
+            if(j==playerList.size())
+                j=0;
+            playerList.get(j).getHand().addCardToTop(deck.getTopCard());
+            j++;
+        }
+    }
+
     public static void startGame(int players){
-        Deck deck = new Deck();
-
-        deck.createDeck();
-
-        deck.shuffleDeck();
-
-        //deck.displayDeck();
-
-        Dealer dealer = new Dealer(deck);
 
         LinkedHashMap<Integer,Player> playerList = createPlayerList(players);
 
-        dealer.dealCards(playerList);
+        Deck deck = new Deck();
+        deck.createDeck();
+        deck.shuffleDeck();
+
+        dealCards(playerList,deck);
 
         displayHands(playerList);
 
@@ -73,24 +79,24 @@ public class Game {
         Table table = new Table();
         Table aux = new Table();
 
-//        for(int i=0;i<10;i++){
-//            checkAndUpdatePlayersInGame(playerList,getIndexOfPlayersInGame(playerList));
-//            simulateRound(playerList,table,getIndexOfPlayersInGame(playerList),aux);
-//            displayHands(playerList);
-//        }
-
-
-
-        long start = System.currentTimeMillis();
-        long end = start + 30 * 1000;
-
-        while (System.currentTimeMillis() < end) {
-            checkAndUpdatePlayersInGame(playerList, getIndexOfPlayersInGame(playerList));
-            displayHands(playerList);
+        for(int i=0;i<10;i++){
+            checkAndUpdatePlayersInGame(playerList,getIndexOfPlayersInGame(playerList));
             simulateRound(playerList,table,getIndexOfPlayersInGame(playerList),aux);
-            if(getIndexOfPlayersInGame(playerList).size()==1)
-                break;
+            displayHands(playerList);
         }
+
+
+
+//        long start = System.currentTimeMillis();
+//        long end = start + 30 * 1000;
+//
+//        while (System.currentTimeMillis() < end) {
+//            checkAndUpdatePlayersInGame(playerList, getIndexOfPlayersInGame(playerList));
+//            displayHands(playerList);
+//            simulateRound(playerList,table,getIndexOfPlayersInGame(playerList),aux);
+//            if(getIndexOfPlayersInGame(playerList).size()==1)
+//                break;
+//        }
 
         System.out.println("@@@@@@@@@@@@@@@@@@END@@@@@@@@@@@@@@@@@@@@@");
 
