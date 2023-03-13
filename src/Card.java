@@ -17,11 +17,13 @@ public final class Card {
         return power;
     }
 
+    public void setPower(int power) {
+        this.power = power;
+    }
 
-    public Card(String number, String sign, int power){
+    public Card(String number, String sign){
         this.number = number;
         this.sign = sign;
-        this.power = power;
     }
 
 

@@ -1,4 +1,3 @@
-import java.lang.reflect.Array;
 import java.util.LinkedHashMap;
 import java.util.Set;
 
@@ -16,7 +15,7 @@ public class Game {
         }
         table.getCardsFromPlayers(playerList,inGame);
         System.out.println(table.getWinners());
-        if(table.getWinners().size()>1){
+        if(table.getWinners().size()>1){ // case war
             Set<Integer> warParticipants = table.getWinners();
             checkAndUpdatePlayersInGame(playerList,warParticipants);
             simulateRound(playerList,table,warParticipants);
@@ -34,10 +33,10 @@ public class Game {
 
     public static void checkAndUpdatePlayersInGame(LinkedHashMap<Integer,Player> playerList, Set<Integer> inGame) {
         Object[] inGameArray = inGame.toArray();
-        for(int i=0;i<inGameArray.length;i++)
-            if(playerList.get(inGameArray[i]).handIsEmpty()){
-                playerList.remove(inGameArray[i]);
-                inGame.remove(inGameArray[i]);
+        for (Object o : inGameArray)
+            if (playerList.get(o).handIsEmpty()) {
+                playerList.remove(o);
+                inGame.remove(o);
             }
     }
 
@@ -65,6 +64,52 @@ public class Game {
         }
     }
 
+    public static void setCardsPower(Deck deck){
+        for(Card card : deck.cards){
+            switch (card.getNumber()){
+                case "Two":
+                    card.setPower(1);
+                    break;
+                case "Three":
+                    card.setPower(2);
+                    break;
+                case "Four":
+                    card.setPower(3);
+                    break;
+                case "Five":
+                    card.setPower(4);
+                    break;
+                case "Six":
+                    card.setPower(5);
+                    break;
+                case "Seven":
+                    card.setPower(6);
+                    break;
+                case "Eight":
+                    card.setPower(7);
+                    break;
+                case "Nine":
+                    card.setPower(8);
+                    break;
+                case "Ten":
+                    card.setPower(9);
+                    break;
+                case "Jack":
+                    card.setPower(10);
+                    break;
+                case "Queen":
+                    card.setPower(11);
+                    break;
+                case "King":
+                    card.setPower(12);
+                    break;
+                case "Ace":
+                    card.setPower(13);
+                    break;
+            }
+        }
+    }
+
     public static void startGame(int players){
 
         LinkedHashMap<Integer,Player> playerList = createPlayerList(players);
@@ -72,37 +117,32 @@ public class Game {
         Deck deck = new Deck();
         deck.createDeck();
         deck.shuffleDeck();
+        setCardsPower(deck);
 
         dealCards(playerList,deck);
 
         displayHands(playerList);
 
-
         Table table = new Table();
-        Table aux = new Table();
 
-//        table.getCardsFromPlayers(playerList,getIndexOfPlayersInGame(playerList));
-//        System.out.println(table.getMax());
-//        System.out.println(table.getWinners());
-
-        for(int i=0;i<10;i++){
-            checkAndUpdatePlayersInGame(playerList,getIndexOfPlayersInGame(playerList));
-            simulateRound(playerList,table,getIndexOfPlayersInGame(playerList));
-            displayHands(playerList);
-        }
-
-
-
-//        long start = System.currentTimeMillis();
-//        long end = start + 30 * 1000;
-//
-//        while (System.currentTimeMillis() < end) {
-//            checkAndUpdatePlayersInGame(playerList, getIndexOfPlayersInGame(playerList));
+//        for(int i=0;i<10;i++){
+//            checkAndUpdatePlayersInGame(playerList,getIndexOfPlayersInGame(playerList));
+//            simulateRound(playerList,table,getIndexOfPlayersInGame(playerList));
 //            displayHands(playerList);
-//            simulateRound(playerList,table,getIndexOfPlayersInGame(playerList),aux);
-//            if(getIndexOfPlayersInGame(playerList).size()==1)
-//                break;
 //        }
+
+
+
+        long start = System.currentTimeMillis();
+        long end = start + 30 * 1000;
+
+        while (System.currentTimeMillis() < end) {
+            checkAndUpdatePlayersInGame(playerList, getIndexOfPlayersInGame(playerList));
+            displayHands(playerList);
+            simulateRound(playerList,table,getIndexOfPlayersInGame(playerList));
+            if(getIndexOfPlayersInGame(playerList).size()==1)
+                break;
+        }
 
         System.out.println("@@@@@@@@@@@@@@@@@@END@@@@@@@@@@@@@@@@@@@@@");
 

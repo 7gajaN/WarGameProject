@@ -28,7 +28,7 @@ public class Deck {
 
         for(String sign: signs)
             for (int i=1;i<=13;i++){
-                this.cards.add(new Card(numbers[i-1], sign, i));
+                this.cards.add(new Card(numbers[i-1], sign));
             }
     }
 
