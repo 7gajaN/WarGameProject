@@ -5,6 +5,30 @@ public final class Card {
     String sign;
     int power;
 
+    public enum Numbers {
+        Two,
+        Three,
+        Four,
+        Five,
+        Six,
+        Seven,
+        Eight,
+        Nine,
+        Ten,
+        Jack,
+        Queen,
+        King,
+        Ace
+    }
+
+    public enum Signs {
+        Hearts,
+        Diamonds,
+        Clubs,
+        Spades
+    }
+    
+
     public String getNumber() {
         return number;
     }
@@ -21,9 +45,9 @@ public final class Card {
         this.power = power;
     }
 
-    public Card(String number, String sign){
-        this.number = number;
-        this.sign = sign;
+    public Card(Numbers number, Signs sign){
+        this.number = number.toString();
+        this.sign = sign.toString();
     }
 
 

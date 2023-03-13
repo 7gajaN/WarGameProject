@@ -114,8 +114,7 @@ public class Game {
 
         LinkedHashMap<Integer,Player> playerList = createPlayerList(players);
 
-        Deck deck = new Deck();
-        deck.createDeck();
+        Deck deck = Deck.createStandard52CardDeck();
         deck.shuffleDeck();
         setCardsPower(deck);
 
@@ -125,24 +124,24 @@ public class Game {
 
         Table table = new Table();
 
-//        for(int i=0;i<10;i++){
-//            checkAndUpdatePlayersInGame(playerList,getIndexOfPlayersInGame(playerList));
-//            simulateRound(playerList,table,getIndexOfPlayersInGame(playerList));
-//            displayHands(playerList);
-//        }
+    //    for(int i=0;i<10;i++){
+    //        checkAndUpdatePlayersInGame(playerList,getIndexOfPlayersInGame(playerList));
+    //        simulateRound(playerList,table,getIndexOfPlayersInGame(playerList));
+    //        displayHands(playerList);
+    //    }
 
 
 
-        long start = System.currentTimeMillis();
-        long end = start + 30 * 1000;
+        // long start = System.currentTimeMillis();
+        // long end = start + 30 * 1000;
 
-        while (System.currentTimeMillis() < end) {
-            checkAndUpdatePlayersInGame(playerList, getIndexOfPlayersInGame(playerList));
-            displayHands(playerList);
-            simulateRound(playerList,table,getIndexOfPlayersInGame(playerList));
-            if(getIndexOfPlayersInGame(playerList).size()==1)
-                break;
-        }
+        // while (System.currentTimeMillis() < end) {
+        //     checkAndUpdatePlayersInGame(playerList, getIndexOfPlayersInGame(playerList));
+        //     displayHands(playerList);
+        //     simulateRound(playerList,table,getIndexOfPlayersInGame(playerList));
+        //     if(getIndexOfPlayersInGame(playerList).size()==1)
+        //         break;
+        // }
 
         System.out.println("@@@@@@@@@@@@@@@@@@END@@@@@@@@@@@@@@@@@@@@@");
 
