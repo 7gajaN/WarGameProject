@@ -2,7 +2,7 @@ import java.util.*;
 
 public class Table {
 
-    CardComparator cardComparator = new CardComparator();
+    Game.CardComparator cardComparator = new Game.CardComparator();
 
     TreeMap<Card,Player> cards; 
 

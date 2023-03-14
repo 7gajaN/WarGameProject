@@ -8,10 +8,10 @@ public class Game {
     public Game(){
 
     }
-
-    public class CardComparator implements Comparator<Card>{
     
-        public int getNumberValue(Card card){
+    public static class CardComparator implements Comparator<Card>{
+    
+        public double getNumberValue(Card card){
             switch(card.getNumber()){
                 case Two:
                     return 1;
@@ -42,11 +42,25 @@ public class Game {
             }
             return 0;
         }
+    
+        public double getSignValue(Card card){
+            switch(card.getSign()){
+                case Hearts:
+                    return 0.1;
+                case Spades:
+                    return 0.2;
+                case Diamonds:
+                    return 0.3;
+                case Clubs:
+                    return 0.4;
+            }
+            return 0;
+        }
         
     
         @Override
         public int compare(Card card1, Card card2) {
-            return Integer.compare(getNumberValue(card1), getNumberValue(card2));
+            return Double.compare(getNumberValue(card2) + getSignValue(card2),getNumberValue(card1) + getSignValue(card1));
         } 
     }
 
