@@ -103,8 +103,13 @@ public class Game {
         }
 
     public static void checkAndUpdatePlayersInWar(LinkedList<Player> inGame){
-        for(Player player : inGame)
-            inGame.remove(player);
+        for(int i=0;i<inGame.size();i++)
+            if(inGame.get(i).handIsEmpty()){
+                inGame.remove(i);
+                i--;
+            }
+                
+            
     }
 
     public static LinkedHashMap<Integer,Player> createPlayerList(int nrPlayers){
