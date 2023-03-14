@@ -75,7 +75,7 @@ public class Game {
             LinkedList<Player> warPlayerList = new LinkedList<>();
             warPlayerList.addAll(table.getWinningPlayers());
             table.clearTable();
-
+            checkAndUpdatePlayersInWar(warPlayerList);
             table.getCardFromPlayerList(warPlayerList);
             
         }
@@ -100,8 +100,12 @@ public class Game {
                 if(playerList.get(playerIndexArray[i]).handIsEmpty())
                     playerList.remove(playerIndexArray[i]);
             }
-
         }
+
+    public static void checkAndUpdatePlayersInWar(LinkedList<Player> inGame){
+        for(Player player : inGame)
+            inGame.remove(player);
+    }
 
     public static LinkedHashMap<Integer,Player> createPlayerList(int nrPlayers){
         LinkedHashMap<Integer,Player> playerList = new LinkedHashMap<>();
