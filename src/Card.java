@@ -1,9 +1,8 @@
 
 
 public final class Card {
-    String number;
-    String sign;
-    int power;
+    Numbers number;
+    Signs sign;
 
     public enum Numbers {
         Two,
@@ -29,25 +28,18 @@ public final class Card {
     }
     
 
-    public String getNumber() {
+    public Numbers getNumber() {
         return number;
     }
 
-    public String getSign() {
+    public Signs getSign() {
         return sign;
     }
 
-    public int getPower() {
-        return power;
-    }
-
-    public void setPower(int power) {
-        this.power = power;
-    }
 
     public Card(Numbers number, Signs sign){
-        this.number = number.toString();
-        this.sign = sign.toString();
+        this.number = number;
+        this.sign = sign;
     }
 
 

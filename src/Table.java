@@ -2,59 +2,64 @@ import java.util.*;
 
 public class Table {
 
-    HashMap<Integer,Card> cards;
+    CardComparator cardComparator = new CardComparator();
+
+    TreeMap<Card,Player> cards; 
+
+    Deck cardsInOrder;
 
     public Table(){
-        cards = new LinkedHashMap<>();
+        cards = new TreeMap<Card,Player>(cardComparator);
+        cardsInOrder = new Deck();
     }
 
-    public HashMap<Integer,Card> getCards() {
+    public TreeMap<Card,Player> getCards() {
         return cards;
     }
 
     public void addCardFromPlayer(Player player){
-       this.cards.put(player.index, player.hand.getTopCard());
+        Card card = player.hand.getTopCard();
+       this.cards.put(card,player);
+       this.cardsInOrder.addCardToBottom(card);
     }
 
     public void clearTable(){
         this.cards.clear();
     }
 
-    public int getMax(){
-        final int[] max = {0};
-        this.cards.forEach((i,pc)->{
-            if(pc.getPower()> max[0])
-                max[0] =pc.getPower();
-        });
+    public Set getWinnersCards(){
+        Set cardSet = new TreeSet(cardComparator);
+        cardSet.addAll(this.cards.keySet());
+        Iterator<Card> itr = cardSet.iterator();
+        Card topCard = itr.next();
 
-    return max[0];
+        while(itr.hasNext())
+        if(!topCard.getNumber().equals(itr.next().getNumber()))
+        itr.remove();
+
+        return cardSet; // returns cards of winning players
     }
 
-    public Set<Integer> getWinners(){
-        Set<Integer> winnerIndex = new HashSet<Integer>();
-        int max = getMax();
+    public LinkedList<Player> getWinningPlayers(Set winnerCards){
+        LinkedList<Player> winnersList = new LinkedList<>();
+        Iterator<Card> itr = winnerCards.iterator();
 
-        this.cards.forEach((i,pc)->{
-            if(pc.getPower()==max)
-                winnerIndex.add(i);
-        });
-        return winnerIndex;
-    }
-
-    public void addCardsFromTable(Table table){
-        this.cards.putAll(table.cards);
-    }
-
-    public void getCardsFromPlayers(LinkedHashMap<Integer,Player> playerList, Set<Integer> inGame){
-        Object[] inGameArray = inGame.toArray();
-        for(int i=0;i<inGameArray.length;i++)
-            addCardFromPlayer(playerList.get(inGameArray[i]));
+        while(itr.hasNext()){
+            winnersList.add(this.cards.get(itr.next()));
         }
 
-        public void registerCards(Deck aux){
-        this.cards.forEach((i,pc)->{
-            aux.addCardToBottom(pc);
-        });
-        }
+        return winnersList;
+    }
+
+    public void getCardFromPlayerList(LinkedList<Player> playerList){
+        for(Player player : playerList)
+            addCardFromPlayer(player);
+    }
+
+    public void giveCardsToPlayer(Player player){
+        player.appendCards(cardsInOrder);
+    }
+
+
     }
 

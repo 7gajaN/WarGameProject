@@ -25,23 +25,13 @@ public class Deck {
     public static Deck createStandard52CardDeck(){
         Deck deck = new Deck();
 
-        for(Numbers number : Numbers.values())
-            for(Signs sign : Signs.values())
+        for(Card.Numbers number : Card.Numbers.values())
+            for(Card.Signs sign : Card.Signs.values())
                 deck.addCardToBottom(new Card(number,sign));
 
 
         return deck;
     }
-
-    // public void createDeck(){
-    //     String[] signs = {"Hearts", "Diamonds", "Clubs", "Spades"};
-    //     String[] numbers = {"Two", "Three", "Four", "Five", "Six", "Seven", "Eight", "Nine", "Ten", "Jack", "Queen", "King", "Ace"  };
-
-    //     for(String sign: signs)
-    //         for (int i=1;i<=13;i++){
-    //             this.cards.add(new Card(numbers[i-1], sign));
-    //         }
-    // }
 
     public void shuffleDeck(){
         Collections.shuffle(this.cards);

@@ -1,4 +1,6 @@
+import java.util.Comparator;
 import java.util.LinkedHashMap;
+import java.util.LinkedList;
 import java.util.Set;
 
 public class Game {
@@ -7,23 +9,67 @@ public class Game {
 
     }
 
-    public static void simulateRound(LinkedHashMap<Integer,Player> playerList,Table table,Set<Integer> inGame){
-        Deck aux = new Deck();
-        if(!table.cards.isEmpty()) {
-            table.registerCards(aux);
-            table.clearTable();
+    public class CardComparator implements Comparator<Card>{
+    
+        public int getNumberValue(Card card){
+            switch(card.getNumber()){
+                case Two:
+                    return 1;
+                case Three:
+                    return 2;
+                case Four:
+                    return 3;
+                case Five:
+                    return 4;
+                case Six:
+                    return 5;
+                case Seven:
+                    return 6;
+                case Eight:
+                    return 7;
+                case Nine:
+                    return 8;
+                case Ten:
+                    return 9;
+                case Jack:
+                    return 10;
+                case Queen:
+                    return 11;
+                case King:
+                    return 12;
+                case Ace:
+                    return 13;
+            }
+            return 0;
         }
-        table.getCardsFromPlayers(playerList,inGame);
-        System.out.println(table.getWinners());
-        if(table.getWinners().size()>1){ // case war
-            Set<Integer> warParticipants = table.getWinners();
-            checkAndUpdatePlayersInGame(playerList,warParticipants);
-            simulateRound(playerList,table,warParticipants);
-        }else {
-            table.registerCards(aux);
-            playerList.get(table.getWinners().toArray()[0]).appendCards(aux);
+        
+    
+        @Override
+        public int compare(Card card1, Card card2) {
+            return Integer.compare(getNumberValue(card1), getNumberValue(card2));
+        } 
+    }
+
+    public static void simulateRound(LinkedHashMap<Integer,Player> playerList){
+        Table table = new Table();
+
+        table.getCardFromPlayerList(getInGamePlayerList(playerList));
+
+        System.out.println(table.getWinningPlayers(table.getWinnersCards()));
+
+        while(table.getWinningPlayers(table.getWinnersCards()).size()>1){
+            LinkedList<Player> warPlayerList = new LinkedList<>();
+            warPlayerList.addAll(table.getWinningPlayers(table.getWinnersCards()));
             table.clearTable();
+
+            table.getCardFromPlayerList(warPlayerList);
+            
         }
+        table.giveCardsToPlayer(table.getWinningPlayers(table.getWinnersCards()).get(0));
+        
+
+        displayHands(playerList);
+
     }
 
     public static Set<Integer> getIndexOfPlayersInGame(LinkedHashMap<Integer,Player> playerList){
@@ -31,19 +77,31 @@ public class Game {
     }
 
 
-    public static void checkAndUpdatePlayersInGame(LinkedHashMap<Integer,Player> playerList, Set<Integer> inGame) {
-        Object[] inGameArray = inGame.toArray();
-        for (Object o : inGameArray)
-            if (playerList.get(o).handIsEmpty()) {
-                playerList.remove(o);
-                inGame.remove(o);
+    public static void checkAndUpdatePlayersInGame(LinkedHashMap<Integer,Player> playerList) {
+        
+            Object[] playerIndexArray = playerList.keySet().toArray();
+
+            for(int i=0;i<playerIndexArray.length;i++)
+            {
+                if(playerList.get(playerIndexArray[i]).handIsEmpty())
+                    playerList.remove(playerIndexArray[i]);
             }
-    }
+
+        }
 
     public static LinkedHashMap<Integer,Player> createPlayerList(int nrPlayers){
         LinkedHashMap<Integer,Player> playerList = new LinkedHashMap<>();
         for(int i=0;i<nrPlayers;i++)
             playerList.put(i,new Player(i));
+        return playerList;
+    }
+
+    public static LinkedList<Player> getInGamePlayerList(LinkedHashMap<Integer,Player> playerMap){
+        LinkedList<Player> playerList = new LinkedList<>();
+        playerMap.forEach((i,player)->{
+            playerList.add(player);
+        });
+
         return playerList;
     }
 
@@ -64,51 +122,6 @@ public class Game {
         }
     }
 
-    public static void setCardsPower(Deck deck){
-        for(Card card : deck.cards){
-            switch (card.getNumber()){
-                case "Two":
-                    card.setPower(1);
-                    break;
-                case "Three":
-                    card.setPower(2);
-                    break;
-                case "Four":
-                    card.setPower(3);
-                    break;
-                case "Five":
-                    card.setPower(4);
-                    break;
-                case "Six":
-                    card.setPower(5);
-                    break;
-                case "Seven":
-                    card.setPower(6);
-                    break;
-                case "Eight":
-                    card.setPower(7);
-                    break;
-                case "Nine":
-                    card.setPower(8);
-                    break;
-                case "Ten":
-                    card.setPower(9);
-                    break;
-                case "Jack":
-                    card.setPower(10);
-                    break;
-                case "Queen":
-                    card.setPower(11);
-                    break;
-                case "King":
-                    card.setPower(12);
-                    break;
-                case "Ace":
-                    card.setPower(13);
-                    break;
-            }
-        }
-    }
 
     public static void startGame(int players){
 
@@ -116,34 +129,36 @@ public class Game {
 
         Deck deck = Deck.createStandard52CardDeck();
         deck.shuffleDeck();
-        setCardsPower(deck);
 
         dealCards(playerList,deck);
 
         displayHands(playerList);
 
-        Table table = new Table();
+    //     for(int i=0;i<10;i++){
 
-    //    for(int i=0;i<10;i++){
-    //        checkAndUpdatePlayersInGame(playerList,getIndexOfPlayersInGame(playerList));
-    //        simulateRound(playerList,table,getIndexOfPlayersInGame(playerList));
-    //        displayHands(playerList);
-    //    }
+    //     System.out.println("_______________________________");
+    //     checkAndUpdatePlayersInGame(playerList);
+    //     simulateRound(playerList);
+        
+
+    // }
 
 
 
-        // long start = System.currentTimeMillis();
-        // long end = start + 30 * 1000;
 
-        // while (System.currentTimeMillis() < end) {
-        //     checkAndUpdatePlayersInGame(playerList, getIndexOfPlayersInGame(playerList));
-        //     displayHands(playerList);
-        //     simulateRound(playerList,table,getIndexOfPlayersInGame(playerList));
-        //     if(getIndexOfPlayersInGame(playerList).size()==1)
-        //         break;
-        // }
+        long start = System.currentTimeMillis();
+        long end = start + 5 * 1000;
+
+        while (System.currentTimeMillis() < end) {
+            System.out.println("_______________________________");
+            checkAndUpdatePlayersInGame(playerList);
+            simulateRound(playerList);
+            if(getIndexOfPlayersInGame(playerList).size()==1)
+                break;
+        }
 
         System.out.println("@@@@@@@@@@@@@@@@@@END@@@@@@@@@@@@@@@@@@@@@");
 
     }
+
 }
