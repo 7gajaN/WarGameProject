@@ -27,22 +27,19 @@ public class Table {
         this.cards.clear();
     }
 
-    public Set getWinnersCards(){
+
+    public LinkedList<Player> getWinningPlayers(){
         Set cardSet = new TreeSet(cardComparator);
         cardSet.addAll(this.cards.keySet());
         Iterator<Card> itr = cardSet.iterator();
         Card topCard = itr.next();
 
         while(itr.hasNext())
-        if(!topCard.getNumber().equals(itr.next().getNumber()))
-        itr.remove();
+            if(!topCard.getNumber().equals(itr.next().getNumber()))
+                itr.remove();
 
-        return cardSet; // returns cards of winning players
-    }
-
-    public LinkedList<Player> getWinningPlayers(Set winnerCards){
         LinkedList<Player> winnersList = new LinkedList<>();
-        Iterator<Card> itr = winnerCards.iterator();
+        itr = cardSet.iterator();
 
         while(itr.hasNext()){
             winnersList.add(this.cards.get(itr.next()));

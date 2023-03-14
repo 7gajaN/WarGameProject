@@ -55,17 +55,17 @@ public class Game {
 
         table.getCardFromPlayerList(getInGamePlayerList(playerList));
 
-        System.out.println(table.getWinningPlayers(table.getWinnersCards()));
+        System.out.println(table.getWinningPlayers());
 
-        while(table.getWinningPlayers(table.getWinnersCards()).size()>1){
+        while(table.getWinningPlayers().size()>1){
             LinkedList<Player> warPlayerList = new LinkedList<>();
-            warPlayerList.addAll(table.getWinningPlayers(table.getWinnersCards()));
+            warPlayerList.addAll(table.getWinningPlayers());
             table.clearTable();
 
             table.getCardFromPlayerList(warPlayerList);
             
         }
-        table.giveCardsToPlayer(table.getWinningPlayers(table.getWinnersCards()).get(0));
+        table.giveCardsToPlayer(table.getWinningPlayers().get(0));
         
 
         displayHands(playerList);
